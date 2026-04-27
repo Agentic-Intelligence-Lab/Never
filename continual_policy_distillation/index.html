@@ -410,21 +410,39 @@
 
 
 <!-- Method -->
-<section class="hero is-small">
-  <div class="hero-body">
-    <div class="container is-max-desktop">
-      <h2 class="title is-3">Method</h2>
-      <div class="content has-text-justified">
-        <p>
-          The paper formulates continual policy distillation as a teacher-student learning problem. Distributed RL workers train specialized PPO teachers for individual Meta-World tasks; the central student then learns from teacher demonstrations instead of directly optimizing every task through online RL. This turns the continual RL problem into a more stable continual imitation learning process.
-        </p>
-        <p>
-          The student policy uses a Transformer backbone with sparse Mixture-of-Experts layers. Incremental expert expansion increases capacity as new task phases arrive, while shared components such as input embeddings, layer normalization, and self-attention are frozen after the initial stage to reduce representation drift.
-        </p>
-        <p>
-          A lightweight task embedding module conditions the policy on latent task context inferred from PPO teacher state-action-reward triplets. For forgetting mitigation, the method combines diversity-aware trajectory replay with hierarchical parameter masking so that old skills can be consolidated while new expert capacity remains plastic.
-        </p>
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Method Overview</h2>
+    <div class="columns">
+      <div class="column">
+        <div class="box">
+          <h3 class="title is-5">Distributed PPO teachers</h3>
+          <p>
+            Each task is first solved by a specialized PPO teacher. The resulting demonstrations provide stable state-action supervision for the central policy.
+          </p>
+        </div>
       </div>
+      <div class="column">
+        <div class="box">
+          <h3 class="title is-5">Imitation learning distillation</h3>
+          <p>
+            The student learns teacher behavior through policy distillation, turning sequential RL acquisition into a supervised continual imitation learning problem.
+          </p>
+        </div>
+      </div>
+      <div class="column">
+        <div class="box">
+          <h3 class="title is-5">Expandable Transformer-MoE</h3>
+          <p>
+            Sparse MoE layers give the student scalable capacity, while task embeddings condition the policy on latent context inferred from trajectories.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="content has-text-justified">
+      <p>
+        During continual updates, the framework combines expert expansion, diversity-aware trajectory replay, and hierarchical parameter masking. Shared Transformer components are frozen after the initial stage to reduce representation drift, while newly added experts and task embeddings remain plastic enough to absorb incoming skills.
+      </p>
     </div>
   </div>
 </section>
@@ -432,22 +450,82 @@
 
 
 <!-- Results -->
-<section class="hero is-small is-light">
-  <div class="hero-body">
-    <div class="container is-max-desktop">
-      <h2 class="title is-3">Results</h2>
-      <div class="content has-text-justified">
-        <p>
-          On MT10 multi-task distillation, the optimized central model reaches 88.9% success rate, closely matching the average PPO teacher performance of 90.8% and slightly exceeding the reported MOORE baseline of 88.7%. In two-phase MT25 continual distillation, the central model recovers more than 85% of teacher performance in phase 2 while constraining task-wise forgetting to within 10%.
-        </p>
-        <p>
-          The five-phase MT25 setting is more challenging: the proposed method reaches 69.4% final average accuracy with positive backward transfer of 2.3%. The ablations show why the full combination is needed: removing task embeddings drops performance to 57.9%, replay-only reaches 57.2% with -11.0% BWT, and expert-only expansion collapses to 28.0% with -51.3% BWT.
-        </p>
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Experimental Highlights</h2>
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <table class="table is-striped is-fullwidth">
+          <thead>
+            <tr>
+              <th>Setting</th>
+              <th>Main result</th>
+              <th>Interpretation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>MT10 multi-task distillation</td>
+              <td>88.9% success rate</td>
+              <td>Matches 98% of the PPO teacher average of 90.8%.</td>
+            </tr>
+            <tr>
+              <td>Two-phase MT25 continual distillation</td>
+              <td>&gt;85% teacher performance, &lt;10% forgetting</td>
+              <td>Shows the replay and masking strategy preserves prior tasks during phase 2.</td>
+            </tr>
+            <tr>
+              <td>Five-phase MT25 continual learning</td>
+              <td>69.4% final accuracy, 2.3% BWT</td>
+              <td>Maintains positive backward transfer in the harder five-stage stream.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
+    </div>
+    <div class="content has-text-justified">
+      <p>
+        The ablations isolate the contribution of each component: removing task embeddings drops final accuracy to 57.9%, replay-only obtains 57.2% with -11.0% BWT, and expert-only expansion collapses to 28.0% with -51.3% BWT. The full method works because expansion provides capacity, replay anchors old behavior, masking limits destructive updates, and task embeddings give the policy usable task context.
+      </p>
     </div>
   </div>
 </section>
 <!-- End results -->
+
+
+<!-- Takeaways -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Takeaways</h2>
+    <div class="columns">
+      <div class="column">
+        <div class="content">
+          <h3 class="title is-5">Why distillation?</h3>
+          <p>
+            PPO remains effective for specialized single-task teachers, while imitation learning gives the central model a more stable training signal than direct multi-task online RL.
+          </p>
+        </div>
+      </div>
+      <div class="column">
+        <div class="content">
+          <h3 class="title is-5">Why MoE expansion?</h3>
+          <p>
+            Expert expansion increases capacity over time without forcing every new task to overwrite the same dense parameters.
+          </p>
+        </div>
+      </div>
+      <div class="column">
+        <div class="content">
+          <h3 class="title is-5">Why replay and masking?</h3>
+          <p>
+            Replay keeps representative prior trajectories in the training mix, and masking restricts parameter updates that would otherwise erase old skills.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End takeaways -->
 
 
 <!--BibTex citation -->
