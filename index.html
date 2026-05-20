@@ -25,17 +25,38 @@
       margin-left: auto;
       margin-right: auto;
     }
-    .paper-card {
+    .papers-layout {
+      display: flex;
+      align-items: flex-start;
+      gap: 2.5rem;
+      max-width: 1280px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .paper-list {
+      flex: 1;
+      min-width: 0;
       display: flex;
       flex-direction: column;
-      height: 100%;
+      gap: 1.5rem;
+    }
+    html {
+      scroll-padding-top: 5rem;
+    }
+    .paper-entry {
+      scroll-margin-top: 5rem;
+    }
+    .paper-card {
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      width: 100%;
       background: var(--background-primary);
       border-radius: var(--border-radius-lg);
       border: 1px solid var(--border-color);
       box-shadow: var(--shadow-md);
       overflow: hidden;
-      text-decoration: none !important;
-      color: inherit !important;
+      color: inherit;
       transition: var(--transition);
     }
     .paper-card:hover {
@@ -49,9 +70,16 @@
     }
     .paper-card-thumb {
       position: relative;
-      aspect-ratio: 16 / 9;
+      flex: 0 0 36%;
+      max-width: 400px;
+      min-height: 200px;
       background: var(--background-accent);
       overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+    }
+    .paper-card-thumb:hover {
+      opacity: 0.92;
     }
     .paper-card-thumb img {
       width: 100%;
@@ -59,19 +87,156 @@
       object-fit: cover;
       display: block;
     }
-    .paper-card-body {
-      padding: 1.25rem 1.35rem 1.4rem;
+    .paper-card-content {
       flex: 1;
+      min-width: 0;
+      padding: 1.35rem 1.6rem 1.4rem;
       display: flex;
-      align-items: flex-start;
+      flex-direction: column;
+    }
+    .paper-card-meta {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin-bottom: 0.5rem;
+    }
+    .paper-card-date {
+      display: block;
+      margin-bottom: 0.15rem;
+    }
+    .paper-card-authors span + span::before {
+      content: ", ";
     }
     .paper-card-title {
       font-family: 'Inter', sans-serif;
       font-weight: 700;
-      font-size: 1.1rem;
-      line-height: 1.4;
+      font-size: 1.2rem;
+      line-height: 1.35;
+      margin: 0 0 0.65rem;
+    }
+    .paper-card-title a {
       color: var(--text-primary);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .paper-card-title a:hover {
+      color: var(--primary-color);
+    }
+    .paper-card-abstract {
+      font-size: 0.95rem;
+      line-height: 1.55;
+      color: var(--text-secondary);
+      margin: 0 0 1rem;
+      flex: 1;
+    }
+    .paper-card-actions {
+      margin-top: auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.35rem 1.1rem;
+    }
+    .paper-card-link {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+    .paper-card-link:hover {
+      text-decoration: underline;
+    }
+    .paper-timeline {
+      flex: 0 0 9.5rem;
+      position: sticky;
+      top: 1.75rem;
+      padding-top: 0.25rem;
+    }
+    .paper-timeline-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-light);
+      margin-bottom: 0.85rem;
+    }
+    .paper-timeline-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
       margin: 0;
+      padding: 0 0 0 1rem;
+      list-style: none;
+      border-left: 2px solid var(--border-color);
+    }
+    .paper-timeline-item {
+      position: relative;
+      display: block;
+      padding: 0.4rem 0;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .paper-timeline-item::before {
+      content: "";
+      position: absolute;
+      left: calc(-1rem - 5px);
+      top: 50%;
+      transform: translateY(-50%);
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--background-primary);
+      border: 2px solid var(--border-color);
+      transition: var(--transition);
+    }
+    .paper-timeline-item:hover {
+      color: var(--primary-color);
+    }
+    .paper-timeline-item.is-active {
+      color: var(--primary-color);
+      font-weight: 600;
+    }
+    .paper-timeline-item.is-active::before {
+      background: var(--primary-color);
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgb(37 99 235 / 0.15);
+    }
+    @media screen and (max-width: 1023px) {
+      .papers-layout {
+        flex-direction: column;
+        gap: 1.75rem;
+      }
+      .paper-timeline {
+        flex: none;
+        width: 100%;
+        position: static;
+      }
+      .paper-timeline-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.5rem 1.25rem;
+        border-left: none;
+        padding-left: 0;
+      }
+      .paper-timeline-item {
+        padding: 0.25rem 0;
+      }
+      .paper-timeline-item::before {
+        display: none;
+      }
+    }
+    @media screen and (max-width: 768px) {
+      .paper-card {
+        flex-direction: column;
+      }
+      .paper-card-thumb {
+        flex: none;
+        max-width: none;
+        min-height: 0;
+        aspect-ratio: 16 / 9;
+      }
     }
     .paper-card.is-placeholder {
       cursor: default;
@@ -115,51 +280,196 @@
   </section>
 
   <section class="section pt-5">
-    <div class="container is-max-desktop">
-      <div class="columns is-multiline">
-        <div class="column is-half-tablet is-half-desktop">
-          <a class="paper-card" href="pages/paper-1.html">
-            <div class="paper-card-thumb">
-              <img src="static/images/carousel1.jpg" alt="" width="800" height="450" loading="lazy">
-            </div>
-            <div class="paper-card-body">
-              <h2 class="paper-card-title">Can VLA Models Learn from Real-World Data Continually without Forgetting?</h2>
-            </div>
-          </a>
-        </div>
-        <div class="column is-half-tablet is-half-desktop">
+    <div class="container is-widescreen">
+      <div class="papers-layout">
+        <aside class="paper-timeline" aria-label="Publication timeline by month">
+          <p class="paper-timeline-label">Timeline</p>
+          <ul class="paper-timeline-nav" id="paper-timeline-nav" aria-live="polite"></ul>
+        </aside>
+        <div class="paper-list">
+        <article class="paper-entry" id="paper-2026-09" data-month="2026-09">
           <div class="paper-card is-placeholder" role="note" aria-label="Placeholder for an upcoming paper">
             <div class="paper-card-thumb">
               <span class="paper-card-badge">Coming soon</span>
             </div>
-            <div class="paper-card-body">
+            <div class="paper-card-content">
+              <div class="paper-card-meta">
+                <time class="paper-card-date" datetime="2026-09">September 2026</time>
+                <div class="paper-card-authors">
+                  <span>Agentic Intelligence Lab, HKU</span>
+                </div>
+              </div>
               <h2 class="paper-card-title">RoboNever: A Real-World Dataset for Continual Robot Learning</h2>
+              <p class="paper-card-abstract">A large-scale real-world dataset designed for continual robot learning, capturing diverse tasks and deployment conditions for lifelong policy improvement.</p>
             </div>
           </div>
-        </div>
-        <div class="column is-half-tablet is-half-desktop">
-          <a class="paper-card" href="continual_policy_distillation.html">
-            <div class="paper-card-thumb">
-              <img src="static/images/carousel3.jpg" alt="" width="800" height="450" loading="lazy">
+        </article>
+        <article class="paper-entry" id="paper-2026-05" data-month="2026-05">
+          <div class="paper-card">
+            <a class="paper-card-thumb" href="pages/paper-1.html">
+              <img src="static/images/carousel1.jpg" alt="" width="800" height="450" loading="lazy">
+            </a>
+            <div class="paper-card-content">
+              <div class="paper-card-meta">
+                <time class="paper-card-date" datetime="2026-05">May 2026</time>
+                <div class="paper-card-authors">
+                  <span>Agentic Intelligence Lab, HKU</span>
+                </div>
+              </div>
+              <h2 class="paper-card-title"><a href="pages/paper-1.html">Can VLA Models Learn from Real-World Data Continually without Forgetting?</a></h2>
+              <p class="paper-card-abstract">We study whether vision-language-action models can absorb new real-world robot data over time while retaining prior skills, addressing catastrophic forgetting in deployed VLA systems.</p>
+              <div class="paper-card-actions">
+                <a class="paper-card-link" href="pages/paper-1.html">Paper</a>
+              </div>
             </div>
-            <div class="paper-card-body">
-              <h2 class="paper-card-title">Continual Policy Distillation from Distributed Reinforcement Learning Teachers</h2>
-            </div>
-          </a>
-        </div>
-        <div class="column is-half-tablet is-half-desktop">
-          <a class="paper-card" href="pages/paper-4.html">
-            <div class="paper-card-thumb">
+          </div>
+        </article>
+        <article class="paper-entry" id="paper-2026-03" data-month="2026-03">
+          <div class="paper-card">
+            <a class="paper-card-thumb" href="pages/paper-4.html">
               <img src="static/images/carousel4.jpg" alt="" width="800" height="450" loading="lazy">
+            </a>
+            <div class="paper-card-content">
+              <div class="paper-card-meta">
+                <time class="paper-card-date" datetime="2026-03">March 2026</time>
+                <div class="paper-card-authors">
+                  <span>Agentic Intelligence Lab, HKU</span>
+                </div>
+              </div>
+              <h2 class="paper-card-title"><a href="pages/paper-4.html">Vision Transformers that Never Stop Learning</a></h2>
+              <p class="paper-card-abstract">We explore continual learning for vision transformers so visual representations can adapt to new data streams without erasing knowledge acquired on earlier tasks.</p>
+              <div class="paper-card-actions">
+                <a class="paper-card-link" href="pages/paper-4.html">Paper</a>
+              </div>
             </div>
-            <div class="paper-card-body">
-              <h2 class="paper-card-title">Vision Transformers that Never Stop Learning</h2>
+          </div>
+        </article>
+        <article class="paper-entry" id="paper-2025-12" data-month="2025-12">
+          <div class="paper-card">
+            <a class="paper-card-thumb" href="continual_policy_distillation.html">
+              <img src="static/images/carousel3.jpg" alt="" width="800" height="450" loading="lazy">
+            </a>
+            <div class="paper-card-content">
+              <div class="paper-card-meta">
+                <time class="paper-card-date" datetime="2026-01">January 2026</time>
+                <div class="paper-card-authors">
+                  <span>Qijun He</span>
+                  <span>Yuxuan Li</span>
+                  <span>Mingqi Yuan</span>
+                  <span>Xiaoquan Sun</span>
+                  <span>Wentse Chen</span>
+                  <span>Jeff Schneider</span>
+                  <span>Jiayu Chen</span>
+                </div>
+              </div>
+              <h2 class="paper-card-title"><a href="continual_policy_distillation.html">Continual Policy Distillation from Distributed Reinforcement Learning Teachers</a></h2>
+              <p class="paper-card-abstract">We present a teacher–student framework that decouples continual RL into distributed single-task teacher training and continual distillation into a central generalist model, mitigating forgetting while scaling to sequential tasks.</p>
+              <div class="paper-card-actions">
+                <a class="paper-card-link" href="https://arxiv.org/abs/2601.22475" target="_blank" rel="noopener">Paper</a>
+                <a class="paper-card-link" href="continual_policy_distillation.html">Website</a>
+                <a class="paper-card-link" href="https://github.com/Agentic-Intelligence-Lab/Continual-Policy-Distillation-from-Distributed-Reinforcement-Learning-Teachers" target="_blank" rel="noopener">Code</a>
+              </div>
             </div>
-          </a>
+          </div>
+        </article>
         </div>
       </div>
     </div>
   </section>
+
+  <script>
+    (function () {
+      var monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'];
+      var entries = Array.prototype.slice.call(document.querySelectorAll('.paper-entry[data-month]'));
+      var nav = document.getElementById('paper-timeline-nav');
+      if (!nav || !entries.length) return;
+
+      var scrollOffset = 80;
+      var isProgrammaticScroll = false;
+      var monthToEntry = {};
+
+      entries.forEach(function (entry) {
+        var key = entry.getAttribute('data-month');
+        if (!key) return;
+        var anchorId = 'paper-' + key;
+        if (!entry.id) entry.id = anchorId;
+        if (!monthToEntry[key]) monthToEntry[key] = entry;
+      });
+
+      var months = Object.keys(monthToEntry).sort().reverse();
+
+      function formatMonth(key) {
+        var parts = key.split('-');
+        var monthIndex = parseInt(parts[1], 10) - 1;
+        if (monthIndex < 0 || monthIndex > 11) return key;
+        return monthNames[monthIndex] + ' ' + parts[0];
+      }
+
+      function scrollToEntry(entry) {
+        if (!entry) return;
+        var top = window.scrollY + entry.getBoundingClientRect().top - scrollOffset;
+        isProgrammaticScroll = true;
+        window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+        var key = entry.getAttribute('data-month');
+        if (key && history.replaceState) {
+          history.replaceState(null, '', '#' + entry.id);
+        }
+        window.setTimeout(function () {
+          isProgrammaticScroll = false;
+        }, 700);
+      }
+
+      function setActiveMonth(month) {
+        if (!month) return;
+        nav.querySelectorAll('.paper-timeline-item').forEach(function (link) {
+          link.classList.toggle('is-active', link.getAttribute('data-month') === month);
+        });
+      }
+
+      months.forEach(function (key) {
+        var targetEntry = monthToEntry[key];
+        var li = document.createElement('li');
+        var link = document.createElement('a');
+        link.className = 'paper-timeline-item';
+        link.setAttribute('data-month', key);
+        link.href = '#' + targetEntry.id;
+        link.textContent = formatMonth(key);
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+          scrollToEntry(targetEntry);
+        });
+        li.appendChild(link);
+        nav.appendChild(li);
+      });
+
+      if ('IntersectionObserver' in window) {
+        var observer = new IntersectionObserver(function (observed) {
+          if (isProgrammaticScroll) return;
+          var visible = observed
+            .filter(function (record) { return record.isIntersecting; })
+            .sort(function (a, b) { return b.intersectionRatio - a.intersectionRatio; })[0];
+          if (visible) setActiveMonth(visible.target.getAttribute('data-month'));
+        }, { rootMargin: '-25% 0px -50% 0px', threshold: [0, 0.1, 0.25, 0.5, 0.75, 1] });
+
+        entries.forEach(function (entry) { observer.observe(entry); });
+      }
+
+      function scrollFromHash() {
+        var id = window.location.hash.slice(1);
+        if (!id) return;
+        var target = document.getElementById(id);
+        if (target && target.classList.contains('paper-entry')) {
+          scrollToEntry(target);
+        }
+      }
+
+      if (window.location.hash) {
+        window.requestAnimationFrame(scrollFromHash);
+      }
+      window.addEventListener('hashchange', scrollFromHash);
+    })();
+  </script>
 
   <footer class="footer">
     <div class="container">
