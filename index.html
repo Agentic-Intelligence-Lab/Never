@@ -104,6 +104,15 @@
       display: block;
       margin-bottom: 0.15rem;
     }
+    /* Flex + font-size:0 collapses HTML whitespace between spans (avoids "Name , Name") */
+    .paper-card-authors {
+      display: flex;
+      flex-wrap: wrap;
+      font-size: 0;
+    }
+    .paper-card-authors span {
+      font-size: 0.875rem;
+    }
     .paper-card-authors span + span::before {
       content: ", ";
     }
